@@ -1,4 +1,4 @@
 # java
-sprng-mvc4 + spring4 + mybatis3 project
+spring-mvc4 + spring4 + mybatis3 project
 
 use dubbo provider
