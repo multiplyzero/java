@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN"   
+"http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+
+    <settings>
+        <!-- 下划线自动映射成驼峰 -->
+        <setting name="mapUnderscoreToCamelCase" value="true" />
+    </settings>
+
+    <mappers>
+        <mapper resource="conf/mybatis/mybatis-common.xml" />
+
+        <!-- 1.配置xml 必须写xml 接口UserDaoXml 不需要注解 -->
+        <mapper resource="conf/mybatis/user/User.xml" />
+
+        <!-- 2.配置class 接口UserDao中要有相关注解 org.apache.ibatis.annotations。* ;这样写法可以不用配置 User.xml -->
+        <!-- <mapper class="com.xyz.server.dao.UserDao" /> -->
+    </mappers>
+
+</configuration>  

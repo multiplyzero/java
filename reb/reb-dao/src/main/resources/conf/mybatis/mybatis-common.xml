@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"   
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="common">
+    <sql id="common_page_begin">
+        select * from (select rownum as minrownum,y.* from(
+    </sql>
+
+    <sql id="common_page_end">
+        )y
+        <if test="limit != null">
+            <![CDATA[where rownum <= ${limit} ]]>
+        </if>
+        ) z
+        <if test="start != null">
+            <![CDATA[where z.minrownum > ${start} ]]>
+        </if>
+    </sql>
+
+    <sql id="common_order_by">
+        <if test="sortAndDir != null">
+            order by ${sortAndDir}
+        </if>
+    </sql>
+
+    <sql id="common_limit">
+        <if test="firstResult != null">
+            <if test="pageSize != null">
+                limit ${firstResult}, ${pageSize}
+            </if>
+        </if>
+    </sql>
+</mapper>

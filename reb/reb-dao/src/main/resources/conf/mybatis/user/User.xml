@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"   
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yiwugou.reb.dao.user.UserDao">
+    <sql id="Base_Where_Cause">
+        <where>
+            <if test="password != null">
+                and password = #{password}
+            </if>
+            <if test="username != null">
+                and username = #{username}
+            </if>
+        </where>
+    </sql>
+
+    <sql id="Base_Column_List">
+        <if test="fieldsClause != null">
+            select ${fieldsClause} from t_user t
+        </if>
+        <if test="fieldsClause == null">
+            select id, username, password,create_time from t_user t
+        </if>
+    </sql>
+
+    <select id="count" resultType="java.lang.Integer">
+        select count(1) from t_user t
+        <include refid="Base_Where_Cause" />
+    </select>
+
+    <select id="list" resultType="com.yiwugou.reb.api.entity.user.User">
+        <include refid="Base_Column_List" />
+        <include refid="Base_Where_Cause" />
+        <include refid="common.common_order_by" />
+        <include refid="common.common_limit" />
+    </select>
+
+    <select id="selectByPrimaryKey" resultType="com.yiwugou.reb.api.entity.user.User">
+        <include refid="Base_Column_List" />
+        where id = #{id}
+    </select>
+
+    <delete id="deleteByPrimaryKey">
+        delete from t_user
+        where id = #{id}
+    </delete>
+
+    <insert id="insert" parameterType="com.yiwugou.reb.api.entity.user.User">
+        insert into t_user (username, password,create_time)
+        values (#{username}, #{password}, #{createTime})
+        <selectKey resultType="java.lang.Long" order="AFTER" keyProperty="id">
+            select last_insert_id() as id
+        </selectKey>
+    </insert>
+
+    <update id="update" parameterType="com.yiwugou.reb.api.entity.user.User">
+        update t_user
+        set username = #{username},
+        password =
+        #{password}
+        where id = #{id}
+    </update>
+
+    <update id="updateBySelective" parameterType="com.yiwugou.reb.api.entity.user.User">
+        update t_user
+        <set>
+            <if test="username != null">
+                username = #{username},
+            </if>
+            <if test="password != null">
+                password = #{password},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+
+    <!-- 上面是每个entity都需要的 下面是非必须的 -->
+    <select id="listUserProductBean" resultType="com.yiwugou.reb.api.entity.bean.UserProductBean">
+        select t.id as userId,tp.id as productId,tp.product_name
+        from t_user t inner join t_product tp on tp.user_id = t.id
+        <include refid="common.common_order_by" />
+        <include refid="common.common_limit" />
+    </select>
+    <select id="countUserProduct" resultType="java.lang.Integer">
+        select count(1) from t_user t inner join t_product tp on tp.user_id = t.id
+    </select>
+
+    <select id="listUserProductMap" resultType="java.util.HashMap">
+        select t.id as userId,tp.id as productId,tp.product_name
+        from t_user t inner join t_product tp on tp.user_id = t.id
+        <include refid="common.common_order_by" />
+        <include refid="common.common_limit" />
+    </select>
+</mapper>
